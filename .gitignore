@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+node_modules/
+backend/app.db
+backend/uploads/
+.pytest_cache/
+plan.md
+.claude/

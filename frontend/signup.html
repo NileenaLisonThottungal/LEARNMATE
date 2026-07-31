@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Sign Up</title>
+    <!-- Reference the CSS from the static directory -->
+    <link href="public/signup.css" rel="stylesheet" type="text/css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Set form action to /signup and add an id for JavaScript handling -->
+      <form id="signupForm" action="/signup" method="post">
+        <h1>Sign Up</h1>
+        <div class="input-box">
+          <input type="text" name="name" placeholder="Name" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        <div class="input-box">
+          <input type="email" name="email" placeholder="User Email" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required
+          />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm Password"
+            required
+          />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <div class="remember-forgot">
+          <label> <input type="checkbox" />Remember me </label>
+        </div>
+        <button type="submit" class="btn">Sign Up</button>
+        <!-- Google Login Button -->
+        <button type="button" class="google-btn">
+          <img src="public/google.jpg" alt="Google Logo" />
+          Login with Google
+        </button>
+        <div class="register-link">
+          <p>Already have an account? <a href="/login">Login</a></p>
+        </div>
+      </form>
+    </div>
+
+    <!-- JavaScript to handle form submission -->
+    <script>
+      const signupForm = document.getElementById("signupForm");
+      signupForm.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(signupForm);
+        // Validate that password and confirm_password match before sending
+        if (formData.get("password") !== formData.get("confirm_password")) {
+          alert("Passwords do not match");
+          return;
+        }
+        // Remove confirm_password since the backend expects only name, email, and password.
+        formData.delete("confirm_password");
+
+        try {
+          const response = await fetch("/signup", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
+          if (response.ok) {
+            //alert("Signup successful! Please log in.");
+            // Redirect to the login page after successful signup.
+            window.location.href = "/dashboard";
+          } else {
+            alert(data.detail || "Signup failed");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      });
+    </script>
+  </body>
+</html>

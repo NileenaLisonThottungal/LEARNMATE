@@ -1,0 +1,57 @@
+# Recommended setup for this project (backend + ML pipeline in one environment).
+#
+# Why conda instead of plain pip: on at least one Windows dev machine, pip-installed
+# PyTorch/sentencepiece crashed (DLL load failure / segfault) due to a corrupted
+# system Visual C++ runtime. Conda-forge's builds bundle their own C++ runtime
+# instead of relying on the system one, which avoids the issue entirely.
+#
+# Setup:
+#   conda env create -f environment.yml
+#   conda activate learnmate
+#   python -m spacy download en_core_web_sm
+#   python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt'); \
+#       nltk.download('punkt_tab'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+#   pip install bert-extractive-summarizer "git+https://github.com/boudinfl/pke.git" flashtext
+#     (not available on conda-forge; installed via pip inside the conda env)
+#
+# Run the backend:
+#   cd backend && python main.py
+#
+# Run tests:
+#   cd backend && python -m pytest tests/ -v
+#
+# Model sizes: models/app.py uses flan-t5-base + distilbert-base-uncased
+# (rather than flan-t5-large + bert-large-uncased) so the full pipeline fits
+# in ~1.3GB of model memory instead of ~4.3GB -- confirmed working end-to-end
+# on an 8GB RAM machine (15 questions generated from a 16KB sample doc in
+# ~55s). Swap back to the -large variants in models/app.py's _load_model()
+# and summarize_text() if running on a machine with more headroom, for
+# somewhat higher-quality output.
+
+name: learnmate
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytorch=*=cpu*
+  - transformers=4.46.3  # pinned: 5.x removed TransfoXLModel, which bert-extractive-summarizer imports
+  - sentencepiece
+  - spacy
+  - nltk
+  - scikit-learn
+  - numpy
+  - scipy
+  - fastapi
+  - uvicorn
+  - python-multipart
+  - passlib
+  - bcrypt=4.0.1  # pinned: passlib is unmaintained and breaks on bcrypt>=4.1
+  - pydantic
+  - email-validator
+  - python-dotenv
+  - aiosqlite
+  - pdfplumber
+  - python-docx
+  - pytest
+  - pytest-asyncio
+  - httpx

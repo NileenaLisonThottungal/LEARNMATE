@@ -1,0 +1,21 @@
+# Backend API dependencies.
+#
+# RECOMMENDED: use ../environment.yml (conda) instead of this file, since the
+# backend imports models/app.py directly (see main.py's sys.path setup), and
+# that needs the ML stack from models/requirements.txt in the same environment
+# anyway. See ../environment.yml for the full working setup and why conda is
+# recommended over plain pip on Windows.
+
+fastapi==0.141.1
+uvicorn[standard]==0.52.0
+python-multipart==0.0.32
+passlib==1.7.4
+bcrypt==4.0.1  # pinned: passlib is unmaintained and breaks on bcrypt>=4.1
+pydantic[email]==2.13.4
+python-dotenv==1.2.2
+aiosqlite==0.22.1
+scikit-learn==1.9.0
+pdfplumber==0.11.10
+python-docx==1.2.0
+pytest==9.1.1
+pytest-asyncio==1.4.0

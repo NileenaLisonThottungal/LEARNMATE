@@ -1,0 +1,30 @@
+# Document-to-quiz ML pipeline dependencies (models/app.py).
+#
+# RECOMMENDED: use ../environment.yml (conda) instead of this file.
+# On at least one Windows dev machine, pip-installed torch and sentencepiece
+# crashed (DLL load failure / segfault) due to a corrupted system Visual C++
+# runtime. Conda-forge's builds bundle their own C++ runtime, avoiding the
+# issue entirely. See ../environment.yml for the full working setup.
+#
+# If you install via pip anyway (e.g. on Linux/Mac where this class of issue
+# doesn't apply), steps:
+#   1. pip install torch --index-url https://download.pytorch.org/whl/cpu
+#      (CPU-only build; use a CUDA index instead if you have a GPU)
+#   2. pip install -r requirements.txt
+#   3. python -m spacy download en_core_web_sm
+#   4. python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt'); \
+#        nltk.download('punkt_tab'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+
+transformers==4.46.3  # pinned: 5.x removed TransfoXLModel, which bert-extractive-summarizer imports
+sentencepiece==0.2.2
+spacy==3.8.14
+bert-extractive-summarizer==0.10.1
+flashtext==2.7
+nltk==3.10.0
+scikit-learn==1.9.0
+numpy==2.4.6
+scipy==1.17.1
+
+# pke (keyphrase extraction) isn't published as an installable PyPI release;
+# install it from GitHub:
+# pip install git+https://github.com/boudinfl/pke.git

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <!-- Reference the CSS from the static directory -->
+    <link href="public/login.css" rel="stylesheet" type="text/css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Set form action to /login and add an id for JavaScript handling -->
+      <form id="loginForm" action="/login" method="post">
+        <h1>Login</h1>
+        <div class="input-box">
+          <input type="email" name="email" placeholder="User Email" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required
+          />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <div class="remember-forgot">
+          <label> <input type="checkbox" />Remember me </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <!-- Google Login Button -->
+        <button type="button" class="google-btn">
+          <img src="public/google.jpg" alt="Google Logo" />
+          Login with Google
+        </button>
+        <div class="register-link">
+          <p>Don't have an account? <a href="/signup">Register</a></p>
+        </div>
+      </form>
+    </div>
+
+    <!-- JavaScript to handle form submission -->
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(loginForm);
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // On successful login, redirect to dashboard.
+            window.location.href = "/dashboard";
+          } else {
+            alert(data.detail || "Login failed");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      });
+    </script>
+  </body>
+</html>
